@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <title>ajax example</title>
+    <script>
+      //    make ajax query
+      function makeAjaxQuery() {
+        // create XMLHttpRequest
+
+        var xhttp = new XMLHttpRequest();
+
+        // create a handler for the readystate change
+        xhttp.onreadystatechange = function () {
+          readyStateChangeHandler(xhttp);
+        };
+
+        // making query by async call
+        var queryUrl = "airport.json";
+        xhttp.open("GET", queryUrl, true);
+        xhttp.send();
+      }
+      function readyStateChangeHandler(xhttp) {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          if (xhttp.status == 200) {
+            handleStatusSuccess(xhttp);
+
+            // status ok
+          } else {
+            handleStatusFailure(xhttp);
+            // status not ok
+          }
+        }
+      }
+      function handleStatusFailure(xhttp) {
+        alert("ajax request fail");
+        alert("readystate" + xhttp.readyState);
+        alert("" + xhttp.status);
+      }
+      function handleStatusSuccess(xhttp) {
+        var jsonText = xhttp.responseText;
+        alert(jsonText);
+
+        // parse the json into an object
+        var obj = JSON.parse(jsonText);
+
+        // display the object on the web page
+        display(obj);
+      }
+      // display the javascript object infor on the webpage
+      function display(obj) {
+        var displayDiv = document.getElementById("display");
+        var str = "";
+        var i = 0;
+
+        str += `<b> searchQuery </b> ${obj.searchQuery} <br />
+        <table border = '1'>
+        <tr>
+         <th> airport </th>
+          <th> ICAO </th>
+         <th>IATA </th>
+         <th>location </th>
+        </tr> `;
+
+        for (var i = 0; i < obj.searchResult.length; i++) {
+          var airobj = obj.searchResult[i];
+
+          str += `
+          <tr>
+            <td> ${airobj.airportName} </td>
+            <td> ${airobj.ICAO} </td>
+            <td> ${airobj.IATA} </td>
+            <td> ${airobj.city},  ${airobj.country}</td>
+          </tr>`;
+        }
+        str += "</table>";
+        displayDiv.innerHTML = str;
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="makeAjaxQuery()">search airport</button>
+    <div id="display"></div>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>ajax example</title>
+    <script>
+      //    make ajax query
+      function makeAjaxQuery() {
+        // create XMLHttpRequest
+
+        var xhttp = new XMLHttpRequest();
+
+        // create a handler for the readystate change
+        xhttp.onreadystatechange = function () {
+          readyStateChangeHandler(xhttp);
+        };
+
+        // making query by async call
+        var queryUrl = "url-to-query-the-server";
+        xhttp.open("GET", queryUrl, true);
+        xhttp.send();
+      }
+      function readyStateChangeHandler(xhttp) {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          if (xhttp.status == 200) {
+            handleStatusSuccess(xhttp);
+
+            // status ok
+          } else {
+            handleStatusFailure(xhttp);
+            // status not ok
+          }
+        }
+      }
+      function handleStatusFailure(xhttp) {
+        alert("ajax request fail");
+        alert("readystate" + xhttp.readyState);
+        alert("" + xhttp.status);
+      }
+      function handleStatusSuccess(xhttp) {
+        var jsonText = xhttp.responseText;
+        alert(jsonText);
+
+        // parse the json into an object
+        var obj = JSON.parse(jsonText);
+
+        // display the object on the web page
+        display(obj);
+        // display the javascript object infor on the webpage
+        function display(obj) {}
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="makeAjaxQuery()">click here</button>
+  </body>
+</html>

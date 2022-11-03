@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>ajax example</title>
+    <script>
+      //    make ajax query
+      function makeAjaxQuery() {
+        // create XMLHttpRequest
+
+        var xhttp = new XMLHttpRequest();
+
+        // create a handler for the readystate change
+        xhttp.onreadystatechange = function () {
+          readyStateChangeHandler(xhttp);
+        };
+        
+        // making querya by async call
+        var queryUrl = "faculty.json";
+        xhttp.open("GET", queryUrl, true);
+        xhttp.send();
+      }
+      function readyStateChangeHandler(xhttp) {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          if (xhttp.status == 200) {
+            handleStatusSuccess(xhttp);
+
+            // status ok
+          } else {
+            handleStatusFailure(xhttp);
+            // status not ok
+          }
+        }
+      }
+      function handleStatusFailure(xhttp) {
+        alert("ajax request fail");
+        alert("readystate" + xhttp.readyState);
+        alert("" + xhttp.status);
+      }
+      function handleStatusSuccess(xhttp) {
+        var jsonText = xhttp.responseText;
+
+        // parse the json into an object
+        var obj = JSON.parse(jsonText);
+
+        // display the object on the web page
+        display(obj);
+      }
+      // display the javascript object infor on the webpage
+      function display(obj) {
+        // get the display div element
+        var displayDiv = document.getElementById("display");
+
+        // construct result html
+        var html = "";
+        html += "<b>  Name:</b>";
+        html += obj.name + " <br />";
+        html += " <b> Abbrevaition:</b>";
+        html += obj.abbreviation + " <br />";
+        html += " <b>Email:</b>";
+        html += obj.email + " <br />";
+        html += "<b> Website:</b>";
+        html += obj.web + " <br />";
+        // display the result in the display div
+        displayDiv.innerHTML = html;
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="makeAjaxQuery()">Get faculty details</button>
+    <br />
+    <div id="display"></div>
+  </body>
+</html>
